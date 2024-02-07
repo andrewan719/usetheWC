@@ -2,10 +2,18 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define FILENAME_LENGTH 260
+#define BUFFER_SIZE 65536
+
+//INTENDED BEHAVIOR WITH TEST.TXT: 71 lines, 2269 bytes, 430 words, 2127 characters
 int main(int argc, char **argv) {
 	//intialize file and filename array
 	FILE *fp;
-	char filename[100];
+	char filename[FILENAME_LENGTH];
+	int lines = 0;
+	int words = 0;
+	long int characters = 0;
+	long int bytes = 0;
 	//initialize array of bools for flags
 	bool flags[4] = {false};
 	if(argc == 1) {
@@ -57,12 +65,30 @@ int main(int argc, char **argv) {
 	}
 	else {
 		//flag 1: get byte count of file.
-		if(flags[0] == true) {
+		if(flags[0]) {
 			//seek to end of file, and get position in bytes
 			fseek(fp, 0L, SEEK_END);
-			long int bytes = ftell(fp);
+			bytes = ftell(fp);
 			//display and reset position
 			printf("%ld      ", bytes);
+		}
+		//main loop: used for words, lines, characters
+		if(flags[1] || flags[2] || flags[3]) {
+			char buffer[BUFFER_SIZE];
+			for(;;) {
+				fgets(buffer, BUFFER_SIZE, fp);
+				if(buffer == NULL || buffer == EOF)
+					break;
+				else
+					if(flags[1]) 
+						lines++;
+			}
+		}
+		if(flags[1]) {
+			//ERROR: Lines read outputs as zero. After looking at the compiler logs, seems like
+			//buffer[i] is an int, for whatever reason.
+			//UPDATE: thought I'd fixed it, but I just caused an infinite loop. Ouch. Fix ASAP.
+			printf("%d      ", lines);
 		}
 		printf("%s\n", filename);
 		fclose(fp);
