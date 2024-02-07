@@ -5,8 +5,6 @@
 int main(int argc, char **argv) {
 	//intialize file and filename array
 	FILE *fp;
-	//NOTE: find some way to improve this rather than fixed size of 100.
-	//Perhaps initialize it when the argv is found?
 	char filename[100];
 	//initialize array of bools for flags
 	bool flags[4] = {false};
@@ -24,7 +22,7 @@ int main(int argc, char **argv) {
 		strcpy(filename, argv[1]);
 	}
 	else {
-		for(int i=1; i<argc; i++) { 
+		for(int i=1; i<argc; i++) { 	
 			if(argv[i][0] == '-') {
 				//turn flags into boolean values, and display error message if unidentified
 				switch(argv[i][1]) {
@@ -59,15 +57,12 @@ int main(int argc, char **argv) {
 	}
 	else {
 		//flag 1: get byte count of file.
-		if(flags[0] == true){
+		if(flags[0] == true) {
 			//seek to end of file, and get position in bytes
-			//ERROR: bytes displays as blank number when used. No compiler errors,
-			//and the spaces and filename display work fine. Remedy ASAP.
-			fseek(fp, 0, SEEK_END);
+			fseek(fp, 0L, SEEK_END);
 			long int bytes = ftell(fp);
 			//display and reset position
-			printf("%l      ", bytes);
-			fseek(fp, 0, SEEK_SET);
+			printf("%ld      ", bytes);
 		}
 		printf("%s\n", filename);
 		fclose(fp);
