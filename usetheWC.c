@@ -74,14 +74,11 @@ int main(int argc, char **argv) {
 		}
 		//main loop: used for words, lines, characters
 		if(flags[1] || flags[2] || flags[3]) {
-			char buffer[BUFFER_SIZE];
-			for(;;) {
-				fgets(buffer, BUFFER_SIZE, fp);
-				if(buffer == NULL || buffer == EOF)
-					break;
-				else
-					if(flags[1]) 
-						lines++;
+			char c = fgetc(fp);
+			while(c != EOF) {
+				if(c == '\n') 
+					lines++;
+			c = fgetc(fp);	
 			}
 		}
 		if(flags[1]) {
