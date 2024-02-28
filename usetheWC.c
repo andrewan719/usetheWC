@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define FILENAME_LENGTH 260
-#define BUFFER_SIZE 65536
 
 //INTENDED BEHAVIOR WITH TEST.TXT: 71 lines, 2269 bytes, 430 words, 2127 characters
 int main(int argc, char **argv) {
@@ -71,14 +70,17 @@ int main(int argc, char **argv) {
 			bytes = ftell(fp);
 			//display and reset position
 			printf("%ld      ", bytes);
+			fseek(fp, 0L, SEEK_SET);
 		}
 		//main loop: used for words, lines, characters
 		if(flags[1] || flags[2] || flags[3]) {
+			//get first character in file
 			char c = fgetc(fp);
 			while(c != EOF) {
 				if(c == '\n') 
 					lines++;
-			c = fgetc(fp);	
+				//get next character in file
+				c = fgetc(fp);	
 			}
 		}
 		if(flags[1]) {
