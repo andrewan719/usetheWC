@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define FILENAME_LENGTH 260
-#define DELIMSIZE 2
 
 int main(int argc, char **argv) {
 	//intialize file and filename array
@@ -46,6 +45,9 @@ int main(int argc, char **argv) {
 					case 'm':
 						flags[3] = true;
 						break;
+					case 'h':
+						printf("usetheWC: Windows word counter. Usage: usetheWC [FILENAME]. Command flags include -c for byte counting, -l for line counting, -w for word counting, -m for character counting, and -h to repeat this message.");
+						return 0;
 					default:
 						printf("The flag -%c is unidentified.\n", argv[i][1]);
 						break;
