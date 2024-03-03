@@ -3,12 +3,13 @@
 #include <string.h>
 
 #define FILENAME_LENGTH 260
+#define DELIMSIZE 2
 
-//INTENDED BEHAVIOR WITH TEST.TXT: 71 lines, 2269 bytes, 430 words, 2127 characters
 int main(int argc, char **argv) {
 	//intialize file and filename array
 	FILE *fp;
 	char filename[FILENAME_LENGTH];
+	char prev;
 	int lines = 0;
 	int words = 0;
 	long int characters = 0;
@@ -79,15 +80,22 @@ int main(int argc, char **argv) {
 			while(c != EOF) {
 				if(c == '\n') 
 					lines++;
+				if(c == ' ' && prev != ' ')
+					words++;
+				characters++;
 				//get next character in file
+				prev = c;
 				c = fgetc(fp);	
 			}
 		}
 		if(flags[1]) {
-			//ERROR: Lines read outputs as zero. After looking at the compiler logs, seems like
-			//buffer[i] is an int, for whatever reason.
-			//UPDATE: thought I'd fixed it, but I just caused an infinite loop. Ouch. Fix ASAP.
 			printf("%d      ", lines);
+		}
+		if(flags[2]) {
+			printf("%d      ", words);
+		}
+		if(flags[3]) {
+			printf("%ld      ", characters);
 		}
 		printf("%s\n", filename);
 		fclose(fp);
