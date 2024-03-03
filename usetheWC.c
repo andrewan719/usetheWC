@@ -16,17 +16,20 @@ int main(int argc, char **argv) {
 	//initialize array of bools for flags
 	bool flags[4] = {false};
 	if(argc == 1) {
-		//Allow for standard input later, for now just return 0
-		printf("Invalid syntax.\n");
-		printf("Correct syntax: usetheWC [flags] [filename].");
-		return 1;
+		flags[0] = true;
+		flags[1] = true;
+		flags[2] = true;		
+		//open file, return error message if not possible
+		fp = stdin;
 	}	
-	if(argc == 2) {
+	else if(argc == 2) {
 		//Set flags to be -c, -l, -w, set filename to argv[1]
 		flags[0] = true;
 		flags[1] = true;
 		flags[2] = true;
 		strcpy(filename, argv[1]);
+		//open file, return error message if not possible
+		fp = fopen(filename, "r");
 	}
 	else {
 		for(int i=1; i<argc; i++) { 	
@@ -58,9 +61,10 @@ int main(int argc, char **argv) {
 				strcpy(filename, argv[i]);
 			}
 		}
+
+		//open file, return error message if not possible
+		fp = fopen(filename, "r");
 	}
-	//open file, return error message if not possible
-	fp = fopen(filename, "r");
 	if(fp == NULL) {
 		printf("usetheWC: cannot open %s\n", filename);
 		return 2;
